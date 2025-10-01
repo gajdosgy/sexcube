@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dobókocka képekkel</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f0f0f0;
+    perspective: 800px;
+  }
+
+  .cube {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .face {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    backface-visibility: hidden;
+  }
+
+  /* 3D elhelyezés */
+  .front  { transform: rotateY(0deg) translateZ(100px); }
+  .back   { transform: rotateY(180deg) translateZ(100px); }
+  .right  { transform: rotateY(90deg) translateZ(100px); }
+  .left   { transform: rotateY(-90deg) translateZ(100px); }
+  .top    { transform: rotateX(90deg) translateZ(100px); }
+  .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+  .dice-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="cube" id="cube">
+  <div class="face front"><img src="dice1.png" alt="1" class="dice-img"></div>
+  <div class="face back"><img src="dice6.png" alt="6" class="dice-img"></div>
+  <div class="face right"><img src="dice3.png" alt="3" class="dice-img"></div>
+  <div class="face left"><img src="dice4.png" alt="4" class="dice-img"></div>
+  <div class="face top"><img src="dice5.png" alt="5" class="dice-img"></div>
+  <div class="face bottom"><img src="dice2.png" alt="2" class="dice-img"></div>
+</div>
+
+<script>
+const cube = document.getElementById('cube');
+
+// Oldalhoz tartozó végső forgások
+const finalRotations = {
+  1: { x: 0, y: 0 },
+  2: { x: -90, y: 0 },
+  3: { x: 0, y: -90 },
+  4: { x: 0, y: 90 },
+  5: { x: 90, y: 0 },
+  6: { x: 180, y: 0 }
+};
+
+cube.addEventListener('click', () => {
+  // Véletlenszerű pörgés
+  const xRot = 720 + Math.floor(Math.random()*720);
+  const yRot = 720 + Math.floor(Math.random()*720);
+  cube.style.transition = 'transform 2s cubic-bezier(0.25, 1, 0.5, 1)';
+  cube.style.transform = `rotateX(${xRot}deg) rotateY(${yRot}deg)`;
+
+  // Megállás után véletlenszerű oldal
+  setTimeout(() => {
+    const number = Math.floor(Math.random()*6)+1;
+    const final = finalRotations[number];
+    cube.style.transition = 'transform 1s ease-out';
+    cube.style.transform = `rotateX(${final.x}deg) rotateY(${final.y}deg)`;
+  }, 2000);
+});
+</script>
+
+</body>
+</html>
